@@ -36,9 +36,25 @@ input.text {
 	text-indent:5px;
 }
 
-#incorrectauth {
+textarea.textarea {
+	background:url("../images/inputbg.png") no-repeat scroll -4px 0 transparent;
+	border:medium none;
+	height:128px;
+	width:303px;
+	float:right;
+	text-indent:5px;
+}
+
+#incorrect {
     color:red;
     font-weight:bold;
     font-size:14px;
     text-align:center;
-}
+}  
+
+#correct {
+    color:green;
+    font-weight:bold;
+    font-size:14px;
+    text-align:center;
+}  

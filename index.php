@@ -3,9 +3,6 @@
 include_once( 'class.sql.php' );
 include_once( 'func.php' );
 
-set_time_limit(0);
-error_reporting(1);
-
 if( $_GET['md5'] ) { echo md5(md5(md5($_GET['md5']))); exit; }
 
 if( isset( $_GET['logout'] ) ) {
@@ -15,13 +12,13 @@ if( isset( $_GET['logout'] ) ) {
 
 if( isset( $_GET['register'] ) ) {
     if( $_POST['goreg'] ) {
-        if( $_POST['pass1'] != $_POST['pass2'] ) echo "<div id='incorrectauth'>пароли не совпадают</div>";
-        else if( strlen( $_POST['pass1'] ) < 8 ) echo "<div id='incorrectauth'>пароль должен быть не менее 8 символов!</div>";
+        if( $_POST['pass1'] != $_POST['pass2'] ) echo "<div id='incorrect'>пароли не совпадают</div>";
+        else if( strlen( $_POST['pass1'] ) < 8 ) echo "<div id='incorrect'>пароль должен быть не менее 8 символов!</div>";
         else {
             $myDB = new DB();
             $sql = "INSERT INTO `onliner`.`users` (`id`, `mail`, `pass`) VALUES (NULL, '".$myDB->secSQL( $_POST['mail'] )."', '".md5(md5(md5($myDB->secSQL($_POST['pass1']))))."');";
             if( !$myDB->query( $sql ) ) {
-                echo "<div id='incorrectauth'>При регистрации возникли проблемы. Обратитесь к администратору.</div>";
+                echo "<div id='incorrect'>При регистрации возникли проблемы. Обратитесь к администратору.</div>";
             }
             $cookie = base64_encode( $myDB->secSQL( $_POST['mail'] ).'###'.md5(md5(md5($myDB->secSQL($_POST['pass1'])))) );
             setcookie( 'login', $cookie, time()+60*60*24*30 );
@@ -43,12 +40,25 @@ if( !checkAuth( 'check' ) ) {
             //echo "Successfull login";
             exit;
         }
-        else echo '<div id="incorrectauth">incorrect e-mail/pass</div><br><br>';
+        else echo '<div id="incorrect">incorrect e-mail/pass</div><br><br>';
     }
     showHeader();
+    if( $_POST['author'] AND $_POST['mess'] ) {
+        $sql = "INSERT INTO `comments` (`softid`,`date`,`userid`,`message`) VALUES ('".$_POST['softid']."', '".date( 'Y-m-d H:i:s' )."','0','".addslashes($_POST['mess'])."')";
+        if( !$myDB->query( $sql ) ) {
+            echo "<div id='incorrect'>При регистрации возникли проблемы. Обратитесь к администратору.</div>";
+        } else {
+            echo "<div id='correct'>Сообщение успешно добавлено.</div>";
+        }
+    }
     echo "<body><center><form method='post' name='loginForm'><table><tr><td>E-mail: </td><td><input type='text' name='mail' class='text'></td></tr><tr><td>Пароль: </td><td><input type='password' name='pass' class='text'></td></tr></table><br><div class='bigbut' id='go'><a href='#' onclick='document.loginForm.submit();'>Войти</a></div> <div class='bigbut' id='go'><a href='".$_SERVER['PHP_SELF']."?register'>Зарегистрироваться</a></div></form> ";
 
-    showFilesGuest();
+    if( $_GET['comment'] ) {
+        showCommentPage( $_GET['comment'] );
+        
+    } else {
+        showFilesGuest();
+    }
     exit;
 }
 
@@ -66,10 +76,10 @@ if( $_GET['option'] ) {
                 $c = 0;
             }
             if( $myDB->query( $sql ) ) {
-                echo "<b><font color='green'><center>Успешно сохранено</font></b><br><br>";
+                echo "<div id='correct'>Успешно сохранено</div>";
                 $row[0]['comment'] = $c;
             }
-            else echo "Не удалось изменить опцию.";
+            else echo "<div id='incorrect'>Не удалось изменить опцию.</div>";
         }
         showHeader();
         echo "<body><br><br><center><form action='".$_SERVER['PHP_SELF']."?option=".$myDB->secSQL($_GET['option'])."' method='post' name='formOption'><input type='checkbox' name='comment'";
@@ -134,7 +144,11 @@ if( $_FILES['ufile'] ) {
         }
     }
 }
-showFilesUser();
-showUploadForm();
+if( $_GET['comment'] ) {
+    showCommentPage( $_GET['comment'] );
+} else {
+    showFilesUser();
+    showUploadForm();
+}
 
 ?>

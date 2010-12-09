@@ -16,3 +16,12 @@ CREATE TABLE  `onliner`.`files` (
 `ua` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` )
 ) ENGINE = MYISAM ;
+
+CREATE TABLE  `onliner`.`comments` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`softid` INT NOT NULL ,
+`date` DATETIME NOT NULL ,
+`userid` INT NOT NULL ,
+`message` TEXT NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = MYISAM ;

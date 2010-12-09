@@ -2,6 +2,7 @@
 
 error_reporting( 1 );
 set_time_limit( 0 );
+
 include_once( 'config.php' );
 define( 'DEBUG', 'file' );
 
