@@ -1,5 +1,5 @@
 body {
-	margin:0;
+	margin:30;
 	padding:0;
 	font-family:Arial, verdana;
 	font-size:14px;
@@ -25,4 +25,20 @@ body {
 	margin-right:-18px;
 	color:#d4105c;
 	font-size:18px;
+}
+
+input.text {
+	background:url("../images/inputbg.png") no-repeat scroll -4px 0 transparent;
+	border:medium none;
+	height:28px;
+	width:303px;
+	float:right;
+	text-indent:5px;
+}
+
+#incorrectauth {
+    color:red;
+    font-weight:bold;
+    font-size:14px;
+    text-align:center;
 }
