@@ -1,0 +1,28 @@
+body {
+	margin:0;
+	padding:0;
+	font-family:Arial, verdana;
+	font-size:14px;
+	color:#266e8e;
+}
+
+.bigbut {
+	background:url(../images/bigbutton.png) 0 -46px no-repeat;
+	display:inline-block;
+	margin-left:14px;
+
+}
+.bigbut a:hover {
+	color:#266e8e;
+}
+.bigbut a{
+	text-decoration:none;
+	display:block;
+	height:46px;
+	background:url(../images/bigbutton.png) right 0 no-repeat;	
+	line-height:42px;
+	padding:0 40px;
+	margin-right:-18px;
+	color:#d4105c;
+	font-size:18px;
+}
