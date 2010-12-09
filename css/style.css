@@ -58,3 +58,20 @@ textarea.textarea {
     font-size:14px;
     text-align:center;
 }  
+
+/* SETUP */
+#step-one{
+    text-align:center;
+}
+
+#step-two{
+    text-align:center;
+}
+#step-zero{
+    text-align:center;
+}
+#ajaxstatus{
+    font-weight:bold;
+    font-size:14px;
+    text-align:center;
+}

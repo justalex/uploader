@@ -11,12 +11,13 @@ if( isset( $_GET['logout'] ) ) {
 }
 
 if( isset( $_GET['register'] ) ) {
-    if( $_POST['goreg'] ) {
+    if( $_POST['mail'] && $_POST['pass1'] && $_POST['pass2'] ) {
         if( $_POST['pass1'] != $_POST['pass2'] ) echo "<div id='incorrect'>пароли не совпадают</div>";
         else if( strlen( $_POST['pass1'] ) < 8 ) echo "<div id='incorrect'>пароль должен быть не менее 8 символов!</div>";
         else {
             $myDB = new DB();
-            $sql = "INSERT INTO `onliner`.`users` (`id`, `mail`, `pass`) VALUES (NULL, '".$myDB->secSQL( $_POST['mail'] )."', '".md5(md5(md5($myDB->secSQL($_POST['pass1']))))."');";
+            $sql = "INSERT INTO `".DB_BASE."`.`users` (`id`, `mail`, `pass`) VALUES (NULL, '".$myDB->secSQL( $_POST['mail'] )."', '".md5(md5(md5($myDB->secSQL($_POST['pass1']))))."');";
+            //echo $sql;
             if( !$myDB->query( $sql ) ) {
                 echo "<div id='incorrect'>При регистрации возникли проблемы. Обратитесь к администратору.</div>";
             }
@@ -40,7 +41,7 @@ if( !checkAuth( 'check' ) ) {
             //echo "Successfull login";
             exit;
         }
-        else echo '<div id="incorrect">incorrect e-mail/pass</div><br><br>';
+        else echo '<div id="incorrect">неверный e-mail или пароль</div><br><br>';
     }
     showHeader();
     if( $_POST['author'] AND $_POST['mess'] ) {
@@ -68,11 +69,11 @@ if( $_GET['option'] ) {
         if( $_POST['save'] ) {
             //var_dump( $_POST ); exit;
             if( $_POST['comment'] == 'on'  ) {
-                $sql = "UPDATE  `onliner`.`files` SET `comment` = '1' WHERE `files`.`userid`='$myID' AND `files`.`id` ='".$myDB->secSQL($_GET['option'])."';";
+                $sql = "UPDATE  `".DB_BASE."`.`files` SET `comment` = '1' WHERE `files`.`userid`='$myID' AND `files`.`id` ='".$myDB->secSQL($_GET['option'])."';";
                 $c = 1;
             }
             else {
-                $sql = "UPDATE  `onliner`.`files` SET `comment` = '0' WHERE `files`.`userid`='$myID' AND `files`.`id` ='".$myDB->secSQL($_GET['option'])."';";
+                $sql = "UPDATE  `".DB_BASE."`.`files` SET `comment` = '0' WHERE `files`.`userid`='$myID' AND `files`.`id` ='".$myDB->secSQL($_GET['option'])."';";
                 $c = 0;
             }
             if( $myDB->query( $sql ) ) {
@@ -117,7 +118,7 @@ if( $_FILES['ufile'] ) {
             echo "<font color='red'>ошибка при загрузке файла \"".htmlspecialchars($ufile_name)."\" ...<br></font>";
         }
         else {
-            $sql = "INSERT INTO `onliner`.`files` (`id`, `filename`, `localname`, `userid`, `date`, `ip`, `ua`) VALUES (NULL, '$ufile_name', '$ufile_name', '$myID', '".date( 'Y-m-d H:i:s' )."', '".$_SERVER['REMOTE_ADDR']."', '".$_SERVER['HTTP_USER_AGENT']."');";
+            $sql = "INSERT INTO `".DB_BASE."`.`files` (`id`, `filename`, `localname`, `userid`, `date`, `ip`, `ua`) VALUES (NULL, '$ufile_name', '$ufile_name', '$myID', '".date( 'Y-m-d H:i:s' )."', '".$_SERVER['REMOTE_ADDR']."', '".$_SERVER['HTTP_USER_AGENT']."');";
 
             if( !$myDB->query( $sql ) ) {
                 echo "<font color='red'>При добавлении файла возникла ошибка. Обратитесь к администратору.</font>";
